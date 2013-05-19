@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wi-Fi напоминания</string>
+    <string name="action_settings">Настройки</string>
+    <string name="title_activity_add_reminder">Новое напоминание</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_add">Добавить</string>
+    <string name="action_edit">Изменить</string>
+    <string name="action_delete">Удалить</string>
+    <string name="label_title">Название</string>
+    <string name="label_reminder_text">Текст напоминания</string>
+    <string name="label_reminders_list">Напоминания</string>
+    <string name="label_ssid_list">Сохраненные сети</string>
+
+</resources>
