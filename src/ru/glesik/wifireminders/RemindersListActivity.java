@@ -38,10 +38,12 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.text.InputType;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -265,6 +267,13 @@ public class RemindersListActivity extends Activity {
 		am.cancel(pi);
 		am.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(),
 				5000, pi);
+		// Enable boot receiver
+		ComponentName receiver = new ComponentName(context, BootReceiver.class);
+		PackageManager pm = context.getPackageManager();
+
+		pm.setComponentEnabledSetting(receiver,
+		        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+		        PackageManager.DONT_KILL_APP);
 	}
 
 	public void stopAlarm() {
@@ -273,6 +282,13 @@ public class RemindersListActivity extends Activity {
 		Intent i = new Intent(getAppContext(), AlarmReceiver.class);
 		PendingIntent pi = PendingIntent.getBroadcast(getAppContext(), 0, i, 0);
 		am.cancel(pi);
+		// Disable boot receiver
+		ComponentName receiver = new ComponentName(context, BootReceiver.class);
+		PackageManager pm = context.getPackageManager();
+
+		pm.setComponentEnabledSetting(receiver,
+		        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+		        PackageManager.DONT_KILL_APP);
 	}
 
 }

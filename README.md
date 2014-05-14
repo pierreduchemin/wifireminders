@@ -20,13 +20,13 @@ If you like this application and want to see it on Google Play, please [donate](
 
 ## Changelog
 
+1.0.1
+
+ * Autostart on device reboot.
+
 1.0
 
  * Initial release.
-
-## Known issues
-
-* Needs manual restart after device reboot.
 
 ## License
 

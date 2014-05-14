@@ -24,10 +24,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -136,6 +138,12 @@ public class AlarmService extends Service {
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, 0,
 				intent, 0);
 		alarmManager.cancel(pendingIntent);
+		// Disable boot receiver
+		ComponentName receiver = new ComponentName(appContext, BootReceiver.class);
+		PackageManager pm = appContext.getPackageManager();
+		pm.setComponentEnabledSetting(receiver,
+		        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+		        PackageManager.DONT_KILL_APP);
 	}
 
 	public void showReminder(String title, String text) {
