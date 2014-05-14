@@ -13,22 +13,22 @@ You can set arbitrary reminders for any stored wireless network. As soon as your
 ## Screenshots
 
 [![t1]][1] [![t2]][2] [![t3]][3] [![t4]][4] [![t5]][5]
-[1]: http://glesik.ru/wp-content/uploads/2013/06/wifireminders_new_reminder.png
-[t1]: http://glesik.ru/wp-content/uploads/2013/06/t_wifireminders_new_reminder.png
-[2]: http://glesik.ru/wp-content/uploads/2013/06/wifireminders_list.png
-[t2]: http://glesik.ru/wp-content/uploads/2013/06/t_wifireminders_list.png
-[3]: http://glesik.ru/wp-content/uploads/2013/06/wifireminders_notification.png
-[t3]: http://glesik.ru/wp-content/uploads/2013/06/t_wifireminders_notification.png
-[4]: http://glesik.ru/wp-content/uploads/2013/06/wifireminders_context_menu.png
-[t4]: http://glesik.ru/wp-content/uploads/2013/06/t_wifireminders_context_menu.png
-[5]: http://glesik.ru/wp-content/uploads/2013/06/wifireminders_edit_text.png
-[t5]: http://glesik.ru/wp-content/uploads/2013/06/t_wifireminders_edit_text.png
+[1]: http://glsk.net/wp-content/uploads/2013/06/wifireminders_new_reminder.png
+[t1]: http://glsk.net/wp-content/uploads/2013/06/t_wifireminders_new_reminder.png
+[2]: http://glsk.net/wp-content/uploads/2013/06/wifireminders_list.png
+[t2]: http://glsk.net/wp-content/uploads/2013/06/t_wifireminders_list.png
+[3]: http://glsk.net/wp-content/uploads/2013/06/wifireminders_notification.png
+[t3]: http://glsk.net/wp-content/uploads/2013/06/t_wifireminders_notification.png
+[4]: http://glsk.net/wp-content/uploads/2013/06/wifireminders_context_menu.png
+[t4]: http://glsk.net/wp-content/uploads/2013/06/t_wifireminders_context_menu.png
+[5]: http://glsk.net/wp-content/uploads/2013/06/wifireminders_edit_text.png
+[t5]: http://glsk.net/wp-content/uploads/2013/06/t_wifireminders_edit_text.png
 
 ## Download
 
-Signed Android package: [wifireminders.apk](http://glesik.ru/playground/android/wifireminders.apk) (Android 2.2+)
+Signed Android package: [wifireminders.apk](http://glsk.net/playground/android/wifireminders.apk) (Android 2.2+)
 
-![QR code](http://glesik.ru/playground/android/wifireminders_qr.png "QR code")
+![QR code](http://glsk.net/playground/android/wifireminders_qr.png "QR code")
 
 If you like this application and want to see it on Google Play, please [donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8RNEWF8QHQHTN) (Bitcoin: `15bSZLRTF3nH9uLrsqW2xm5UMdcd3eqF1e`) so I can pay registration fee.
 
@@ -44,6 +44,6 @@ If you like this application and want to see it on Google Play, please [donate](
 
 ## License
 
-Copyright (c) 2013 Alexander Inglessi (http://glesik.ru).
+Copyright (c) 2013 Alexander Inglessi (http://glsk.net).
 
 Code licensed under [GNU GPL](http://www.gnu.org/licenses/gpl.html) version 3 or any later version. Launcher and notification artwork licensed under [CC BY-NC-SA](http://creativecommons.org/licenses/by-nc-sa/3.0/) 3 or any later version.
