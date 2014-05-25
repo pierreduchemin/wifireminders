@@ -260,13 +260,15 @@ public class RemindersListActivity extends Activity {
 	}
 
 	public void startAlarm() {
+		SharedPreferences sharedPrefSettings = getSharedPreferences("settings", 0);
+		int interval = sharedPrefSettings.getInt("Interval", 10000);
 		AlarmManager am = (AlarmManager) this
 				.getSystemService(Context.ALARM_SERVICE);
 		Intent i = new Intent(getAppContext(), AlarmReceiver.class);
 		PendingIntent pi = PendingIntent.getBroadcast(getAppContext(), 0, i, 0);
 		am.cancel(pi);
 		am.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(),
-				5000, pi);
+				interval, pi);
 		// Enable boot receiver
 		ComponentName receiver = new ComponentName(context, BootReceiver.class);
 		PackageManager pm = context.getPackageManager();
