@@ -18,6 +18,7 @@
 package ru.glesik.wifireminders;
 
 import java.util.List;
+
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -30,10 +31,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 public class AlarmService extends Service {
@@ -147,6 +150,12 @@ public class AlarmService extends Service {
 	}
 
 	public void showReminder(String title, String text) {
+		SharedPreferences sharedPrefSettings = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean vibrate = sharedPrefSettings.getBoolean("prefVibrate", true);
+		String sound = sharedPrefSettings.getString("prefRingtone", "default");
+		Uri soundURI = Uri.parse(sound);
+		//Toast.makeText(this, interval+" - "+sound, Toast.LENGTH_SHORT).show();
+		
 		Context appContext = getApplicationContext();
 		NotificationManager mNotificationManager = (NotificationManager) appContext
 				.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -163,11 +172,12 @@ public class AlarmService extends Service {
 				.setSmallIcon(icon)
 				.setContentTitle(title)
 				.setContentText(text)
-				// TODO: .setSound(soundUri)
+				//.setVibrate(pattern)
+				.setSound(soundURI)
 				.setDefaults(
-						Notification.DEFAULT_SOUND
-								| Notification.DEFAULT_VIBRATE
-								| Notification.DEFAULT_LIGHTS)
+//						Notification.DEFAULT_SOUND
+//								| Notification.DEFAULT_VIBRATE
+								Notification.DEFAULT_LIGHTS)
 				.setPriority(NotificationCompat.PRIORITY_HIGH)
 				.setOnlyAlertOnce(true);
 		Intent ni = new Intent(appContext, RemindersListActivity.class);
@@ -176,8 +186,12 @@ public class AlarmService extends Service {
 		PendingIntent pi = PendingIntent.getActivity(appContext, 0, ni, 0);
 		mBuilder.setContentIntent(pi);
 		mBuilder.setAutoCancel(true);
+		Notification notification = mBuilder.build();
+		if (vibrate) {
+			notification.defaults |= Notification.DEFAULT_VIBRATE;
+		}
 		// Displaying notification with random id, in case there will be more.
 		mNotificationManager.notify((int) (Math.random() * ((999) + 1)),
-				mBuilder.build());
+				notification);
 	}
 }

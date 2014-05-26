@@ -12,5 +12,12 @@
     <string name="label_reminder_text">Текст напоминания</string>
     <string name="label_reminders_list">Напоминания</string>
     <string name="label_ssid_list">Сохраненные сети</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="settings_interval">Интервал</string>
+    <string name="settings_interval_sum">Интервал опроса Wi-Fi</string>
+    <string name="settings_sound">Звук</string>
+    <string name="settings_sound_sum">Звук уведомлений</string>
+    <string name="settings_vibrate">Вибрация</string>
+    <string name="settings_vibrate_sum">Вибрация с уведомлениями</string>
 
 </resources>

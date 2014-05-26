@@ -23,8 +23,6 @@
  * If yes, the notification is shown and active rules check is repeated. If there are no
  * active reminders, the AlarmManager is stopped.
  *
- * TODO: Restart after reboot.
- * TODO: Add settings (sound, update frequency).
  * TODO: Pass active SSIDs with AlarmManager to minimize settings reads.
  * TODO: Add current visible networks to the list when adding reminder.
  */
@@ -34,6 +32,7 @@ package ru.glesik.wifireminders;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -117,8 +116,13 @@ public class RemindersListActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.action_add:
 			// Show Add Reminder activity.
-			Intent intent = new Intent(this, AddReminderActivity.class);
-			startActivity(intent);
+			Intent ari = new Intent(this, AddReminderActivity.class);
+			startActivity(ari);
+			return true;
+		case R.id.action_settings:
+			// Show Add Reminder activity.
+			Intent si = new Intent(this, SettingsActivity.class);
+			startActivity(si);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -260,8 +264,9 @@ public class RemindersListActivity extends Activity {
 	}
 
 	public void startAlarm() {
-		SharedPreferences sharedPrefSettings = getSharedPreferences("settings", 0);
-		int interval = sharedPrefSettings.getInt("Interval", 10000);
+		SharedPreferences sharedPrefSettings = PreferenceManager.getDefaultSharedPreferences(this);
+		String intervalString = sharedPrefSettings.getString("prefInterval", "60000");
+		int interval = Integer.parseInt(intervalString);
 		AlarmManager am = (AlarmManager) this
 				.getSystemService(Context.ALARM_SERVICE);
 		Intent i = new Intent(getAppContext(), AlarmReceiver.class);

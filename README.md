@@ -34,6 +34,11 @@ If you like this application and want to see it on Google Play, please [donate](
 
 ## Changelog
 
+1.1.0
+
+ * Configurable polling interval (60 seconds by default)
+ * Configurable notification sound and vibration
+
 1.0.1
 
  * Autostart on device reboot.

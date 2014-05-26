@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.glesik.wifireminders"
-    android:versionCode="101"
-    android:versionName="1.0.1" >
+    android:versionCode="110"
+    android:versionName="1.1.0" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -49,6 +49,12 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ru.glesik.wifireminders.RemindersListActivity" />
+        </activity>
+        
+        <activity
+            android:name="ru.glesik.wifireminders.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="ru.glesik.wifireminders.RemindersListActivity" >
         </activity>
 
         <service

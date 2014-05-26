@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class BootReceiver extends BroadcastReceiver {
 	public BootReceiver() {
@@ -14,8 +15,9 @@ public class BootReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-			SharedPreferences sharedPrefSettings = context.getSharedPreferences("settings", 0);
-			int interval = sharedPrefSettings.getInt("Interval", 10000);
+			SharedPreferences sharedPrefSettings = PreferenceManager.getDefaultSharedPreferences(context);
+			String intervalString = sharedPrefSettings.getString("prefInterval", "60000");
+			int interval = Integer.parseInt(intervalString);
 			AlarmManager am = (AlarmManager) context
 					.getSystemService(Context.ALARM_SERVICE);
 			Intent i = new Intent(context, AlarmReceiver.class);
