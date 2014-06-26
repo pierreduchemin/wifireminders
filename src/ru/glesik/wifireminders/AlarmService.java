@@ -134,16 +134,14 @@ public class AlarmService extends Service {
 	}
 
 	public void stopAlarm() {
-		Context appContext = RemindersListActivity.getAppContext();
-		AlarmManager alarmManager = (AlarmManager) appContext
-				.getSystemService(Context.ALARM_SERVICE);
-		Intent intent = new Intent(appContext, AlarmReceiver.class);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, 0,
+		AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+		Intent intent = new Intent(this, AlarmReceiver.class);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
 				intent, 0);
 		alarmManager.cancel(pendingIntent);
 		// Disable boot receiver
-		ComponentName receiver = new ComponentName(appContext, BootReceiver.class);
-		PackageManager pm = appContext.getPackageManager();
+		ComponentName receiver = new ComponentName(this, BootReceiver.class);
+		PackageManager pm = this.getPackageManager();
 		pm.setComponentEnabledSetting(receiver,
 		        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
 		        PackageManager.DONT_KILL_APP);
@@ -154,10 +152,7 @@ public class AlarmService extends Service {
 		boolean vibrate = sharedPrefSettings.getBoolean("prefVibrate", true);
 		String sound = sharedPrefSettings.getString("prefRingtone", "default");
 		Uri soundURI = Uri.parse(sound);
-		//Toast.makeText(this, interval+" - "+sound, Toast.LENGTH_SHORT).show();
-		
-		Context appContext = getApplicationContext();
-		NotificationManager mNotificationManager = (NotificationManager) appContext
+		NotificationManager mNotificationManager = (NotificationManager) this
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		int icon;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -168,7 +163,7 @@ public class AlarmService extends Service {
 			icon = R.drawable.notify_legacy;
 		}
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-				appContext)
+				this)
 				.setSmallIcon(icon)
 				.setContentTitle(title)
 				.setContentText(text)
@@ -180,10 +175,10 @@ public class AlarmService extends Service {
 								Notification.DEFAULT_LIGHTS)
 				.setPriority(NotificationCompat.PRIORITY_HIGH)
 				.setOnlyAlertOnce(true);
-		Intent ni = new Intent(appContext, RemindersListActivity.class);
+		Intent ni = new Intent(this, RemindersListActivity.class);
 		ni.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		PendingIntent pi = PendingIntent.getActivity(appContext, 0, ni, 0);
+		PendingIntent pi = PendingIntent.getActivity(this, 0, ni, 0);
 		mBuilder.setContentIntent(pi);
 		mBuilder.setAutoCancel(true);
 		Notification notification = mBuilder.build();

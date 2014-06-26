@@ -59,18 +59,10 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class RemindersListActivity extends Activity {
 
-	private static Context context;
-
-	public static Context getAppContext() {
-		return RemindersListActivity.context;
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_reminders_list);
-		// Keep context for external use (AlarmManager).
-		RemindersListActivity.context = getApplicationContext();
 		// Create adapter for remindersListView.
 		ListView listView = (ListView) findViewById(R.id.remindersListView);
 		ArrayList<String> listItems = new ArrayList<String>();
@@ -269,14 +261,14 @@ public class RemindersListActivity extends Activity {
 		int interval = Integer.parseInt(intervalString);
 		AlarmManager am = (AlarmManager) this
 				.getSystemService(Context.ALARM_SERVICE);
-		Intent i = new Intent(getAppContext(), AlarmReceiver.class);
-		PendingIntent pi = PendingIntent.getBroadcast(getAppContext(), 0, i, 0);
+		Intent i = new Intent(this, AlarmReceiver.class);
+		PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
 		am.cancel(pi);
 		am.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(),
 				interval, pi);
 		// Enable boot receiver
-		ComponentName receiver = new ComponentName(context, BootReceiver.class);
-		PackageManager pm = context.getPackageManager();
+		ComponentName receiver = new ComponentName(this, BootReceiver.class);
+		PackageManager pm = this.getPackageManager();
 
 		pm.setComponentEnabledSetting(receiver,
 		        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
@@ -286,12 +278,12 @@ public class RemindersListActivity extends Activity {
 	public void stopAlarm() {
 		AlarmManager am = (AlarmManager) this
 				.getSystemService(Context.ALARM_SERVICE);
-		Intent i = new Intent(getAppContext(), AlarmReceiver.class);
-		PendingIntent pi = PendingIntent.getBroadcast(getAppContext(), 0, i, 0);
+		Intent i = new Intent(this, AlarmReceiver.class);
+		PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
 		am.cancel(pi);
 		// Disable boot receiver
-		ComponentName receiver = new ComponentName(context, BootReceiver.class);
-		PackageManager pm = context.getPackageManager();
+		ComponentName receiver = new ComponentName(this, BootReceiver.class);
+		PackageManager pm = this.getPackageManager();
 
 		pm.setComponentEnabledSetting(receiver,
 		        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
