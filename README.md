@@ -30,6 +30,13 @@ Signed Android package: [wifireminders.apk](http://glsk.net/playground/android/w
 
 ![QR code](http://glsk.net/playground/android/wifireminders_qr.png "QR code")
 
+Or get if from F-Droid repository:
+
+[![t2]][2]
+
+[t2]: http://glsk.net/wp-content/uploads/2013/08/get_it_on_f-droid_45.png
+[2]: https://f-droid.org/repository/browse/?fdid=ru.glesik.wifireminders
+
 If you like this application and want to see it on Google Play, please [donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8RNEWF8QHQHTN) (Bitcoin: `15bSZLRTF3nH9uLrsqW2xm5UMdcd3eqF1e`) so I can pay registration fee.
 
 ## Changelog
