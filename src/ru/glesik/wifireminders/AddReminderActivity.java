@@ -17,8 +17,9 @@
 
 package ru.glesik.wifireminders;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -30,11 +31,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 
 public class AddReminderActivity extends Activity {
+	
+	private
+		BroadcastReceiver scanReceiver;
+		ArrayAdapter<String> adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,25 +50,48 @@ public class AddReminderActivity extends Activity {
 		setContentView(R.layout.activity_add_reminder);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		// Prepare receiver for AP scan results.
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+		scanReceiver = new BroadcastReceiver() {
+			public void onReceive(Context c, Intent i) {
+				// Scan results are available.
+				WifiManager w = (WifiManager) c
+						.getSystemService(Context.WIFI_SERVICE);
+				// Handle scan results.
+				scanResultHandler(w.getScanResults());
+			}
+		};
+		registerReceiver(scanReceiver, intentFilter);
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(scanReceiver);
 	}
 
 	protected void onResume() {
 		super.onResume();
-		WifiManager mainWifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		List<String> spinnerArray = new ArrayList<String>();
-		// Getting list of stored networks.
-		List<WifiConfiguration> wifiList = mainWifi.getConfiguredNetworks();
-		for (int i = 0; i < wifiList.size(); i++) {
-			// Removing quotes.
-			spinnerArray.add(wifiList.get(i).SSID.toString().replaceAll(
-					"^\"|\"$", ""));
-		}
 		// Creating adapter to populate spinnerSSID items.
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, spinnerArray);
+		adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner Items = (Spinner) findViewById(R.id.spinnerSSID);
 		Items.setAdapter(adapter);
+		WifiManager mainWifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		// Start scanning for visible networks.
+		if (mainWifi.isWifiEnabled()) {
+			mainWifi.startScan();
+		}
+		// Getting list of stored networks.
+		List<WifiConfiguration> wifiList = mainWifi.getConfiguredNetworks();
+		for (WifiConfiguration result : wifiList) {
+			// Removing quotes.
+			adapter.add(result.SSID.toString().replaceAll(
+					"^\"|\"$", ""));
+		}
+		adapter.notifyDataSetChanged();
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -111,6 +142,22 @@ public class AddReminderActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public void scanResultHandler(List<ScanResult> wifiList) {
+		for (ScanResult result : wifiList) {
+			Boolean dupe = false;
+			// Checking for duplicate entries (saved and visible).
+			for (int i = 0; i < adapter.getCount(); i++) {
+				if (adapter.getItem(i).equals(result.SSID)) {
+					dupe = true;
+				}
+			}
+			// Appending SSID to the list.
+			if (!dupe)
+				adapter.add(result.SSID);
+		}
+		adapter.notifyDataSetChanged();
 	}
 
 }
