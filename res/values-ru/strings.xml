@@ -6,7 +6,7 @@
     <string name="title_activity_add_reminder">Новое напоминание</string>
     <string name="action_save">Сохранить</string>
     <string name="action_add">Добавить</string>
-    <string name="action_edit">Изменить</string>
+    <string name="action_edit">Изменить текст</string>
     <string name="action_delete">Удалить</string>
     <string name="label_title">Название</string>
     <string name="label_reminder_text">Текст напоминания</string>
@@ -19,12 +19,14 @@
     <string name="settings_sound_sum">Звук уведомлений</string>
     <string name="settings_vibrate">Вибрация</string>
     <string name="settings_vibrate_sum">Вибрация с уведомлениями</string>
+    <string name="array_0">0 (только при подключении)</string>
     <string name="array_5">5 секунд</string>
     <string name="array_10">10 секунд</string>
-    <string name="array_60">1 минута (по умолчанию)</string>
+    <string name="array_60">1 минута</string>
     <string name="array_600">10 минут</string>
     <string name="array_1800">30 минут</string>
     <string name="array_3600">1 час</string>
+    <string name="array_v_50">0</string>
     <string name="array_v_5">5000</string>
     <string name="array_v_10">10000</string>
     <string name="array_v_60">60000</string>

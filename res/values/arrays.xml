@@ -2,6 +2,7 @@
 <resources>
     
     <string-array name="pollInterval">
+        <item name="0">@string/array_0</item>
         <item name="5">@string/array_5</item>
         <item name="10">@string/array_10</item>
         <item name="60">@string/array_60</item>
@@ -10,6 +11,7 @@
         <item name="3600">@string/array_3600</item>
     </string-array>
     <string-array name="pollIntervalValues">
+        <item name="0">@string/array_v_0</item>
         <item name="5">@string/array_v_5</item>
         <item name="10">@string/array_v_10</item>
         <item name="60">@string/array_v_60</item>
@@ -17,5 +19,7 @@
         <item name="1800">@string/array_v_1800</item>
         <item name="3600">@string/array_v_3600</item>
     </string-array>
+    
+    <bool name="vibrate_default">true</bool>
      
 </resources>

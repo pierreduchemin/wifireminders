@@ -2,13 +2,13 @@
 
 Utility which shows custom notifications when specified wireless networks are in range.
 
-You can set arbitrary reminders for any stored or visible wireless network. As soon as your device is active (e. g. the screen is on) and the network is in range, the reminder will be displayed as standard notification with sound, vibration and blinking indicator.
+You can set arbitrary reminders for any connected or just visible (with polling turned on) wireless network. As soon as your device is active (e. g. the screen is on) and the network is in range, the reminder will be displayed as standard notification with sound, vibration and blinking indicator.
 
 ---
 
 Утилита, выводящая назначенные напоминания при попадании в зоны действия указанных беспроводных сетей.
 
-Вы можете настроить произвольные напоминания для любой сохраненной или видимой беспроводной сети. Как только ваше устройство активируется (например, включится экран) и обнаружит эту сеть, напоминание появится на экране, сопровождаемое звуком, вибрацией и миганием индикатора.
+Вы можете настроить произвольные напоминания для любой сохраненной или видимой (при включенном опросе Wi-Fi) беспроводной сети. Как только ваше устройство активируется (например, включится экран) и обнаружит эту сеть, напоминание появится на экране, сопровождаемое звуком, вибрацией и миганием индикатора.
 
 ## Screenshots
 
@@ -40,6 +40,10 @@ Or get if from F-Droid repository:
 If you like this application and want to see it on Google Play, please [donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8RNEWF8QHQHTN) (Bitcoin: `15bSZLRTF3nH9uLrsqW2xm5UMdcd3eqF1e`) so I can pay registration fee.
 
 ## Changelog
+
+1.2.0
+
+ * Added zero interval option to notify only on connection (saves battery).
 
 1.1.2
 

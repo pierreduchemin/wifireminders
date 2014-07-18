@@ -24,7 +24,6 @@
  * active reminders, the AlarmManager is stopped.
  *
  * TODO: Pass active SSIDs with AlarmManager to minimize settings reads.
- * TODO: Add current visible networks to the list when adding reminder.
  */
 
 package ru.glesik.wifireminders;
@@ -58,6 +57,9 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class RemindersListActivity extends Activity {
+	
+	public
+		WifiReceiver wifiReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,8 @@ public class RemindersListActivity extends Activity {
 				refreshList();
 			}
 		});
+		// Read default settings in case user hasn't set any.
+		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 	}
 
 	@Override
@@ -257,15 +261,17 @@ public class RemindersListActivity extends Activity {
 
 	public void startAlarm() {
 		SharedPreferences sharedPrefSettings = PreferenceManager.getDefaultSharedPreferences(this);
-		String intervalString = sharedPrefSettings.getString("prefInterval", "60000");
+		String intervalString = sharedPrefSettings.getString("prefInterval", "0");
 		int interval = Integer.parseInt(intervalString);
-		AlarmManager am = (AlarmManager) this
-				.getSystemService(Context.ALARM_SERVICE);
-		Intent i = new Intent(this, AlarmReceiver.class);
-		PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
-		am.cancel(pi);
-		am.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(),
-				interval, pi);
+		if (interval != 0) { // Polling enabled - restart AlarmManager.
+			AlarmManager am = (AlarmManager) this
+					.getSystemService(Context.ALARM_SERVICE);
+			Intent i = new Intent(this, AlarmReceiver.class);
+			PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
+			am.cancel(pi);
+			am.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(),
+					interval, pi);
+		}
 		// Enable boot receiver
 		ComponentName receiver = new ComponentName(this, BootReceiver.class);
 		PackageManager pm = this.getPackageManager();
@@ -276,11 +282,16 @@ public class RemindersListActivity extends Activity {
 	}
 
 	public void stopAlarm() {
-		AlarmManager am = (AlarmManager) this
-				.getSystemService(Context.ALARM_SERVICE);
-		Intent i = new Intent(this, AlarmReceiver.class);
-		PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
-		am.cancel(pi);
+		SharedPreferences sharedPrefSettings = PreferenceManager.getDefaultSharedPreferences(this);
+		String intervalString = sharedPrefSettings.getString("prefInterval", "0");
+		int interval = Integer.parseInt(intervalString);
+		if (interval != 0) { // Polling enabled - stop AlarmManager.
+			AlarmManager am = (AlarmManager) this
+					.getSystemService(Context.ALARM_SERVICE);
+			Intent i = new Intent(this, AlarmReceiver.class);
+			PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
+			am.cancel(pi);
+		}
 		// Disable boot receiver
 		ComponentName receiver = new ComponentName(this, BootReceiver.class);
 		PackageManager pm = this.getPackageManager();

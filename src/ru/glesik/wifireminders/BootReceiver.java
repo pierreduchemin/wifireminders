@@ -33,7 +33,7 @@ public class BootReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
 			SharedPreferences sharedPrefSettings = PreferenceManager.getDefaultSharedPreferences(context);
-			String intervalString = sharedPrefSettings.getString("prefInterval", "60000");
+			String intervalString = sharedPrefSettings.getString("prefInterval", "0");
 			int interval = Integer.parseInt(intervalString);
 			AlarmManager am = (AlarmManager) context
 					.getSystemService(Context.ALARM_SERVICE);

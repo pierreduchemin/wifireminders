@@ -37,6 +37,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 
 public class AddReminderActivity extends Activity {
 	
@@ -145,19 +146,24 @@ public class AddReminderActivity extends Activity {
 	}
 	
 	public void scanResultHandler(List<ScanResult> wifiList) {
-		for (ScanResult result : wifiList) {
-			Boolean dupe = false;
-			// Checking for duplicate entries (saved and visible).
-			for (int i = 0; i < adapter.getCount(); i++) {
-				if (adapter.getItem(i).equals(result.SSID)) {
-					dupe = true;
+		SharedPreferences sharedPrefSettings = PreferenceManager.getDefaultSharedPreferences(this);
+		String intervalString = sharedPrefSettings.getString("prefInterval", "0");
+		int interval = Integer.parseInt(intervalString);
+		if (interval != 0) { // Polling enabled.
+			for (ScanResult result : wifiList) {
+				Boolean dupe = false;
+				// Checking for duplicate entries (saved and visible).
+				for (int i = 0; i < adapter.getCount(); i++) {
+					if (adapter.getItem(i).equals(result.SSID)) {
+						dupe = true;
+					}
 				}
+				// Appending SSID to the list.
+				if (!dupe)
+					adapter.add(result.SSID);
 			}
-			// Appending SSID to the list.
-			if (!dupe)
-				adapter.add(result.SSID);
+			adapter.notifyDataSetChanged();
 		}
-		adapter.notifyDataSetChanged();
 	}
 
 }

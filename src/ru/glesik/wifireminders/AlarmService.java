@@ -35,15 +35,17 @@ import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 public class AlarmService extends Service {
 	public AlarmService() {
 	}
 
-	private BroadcastReceiver scanReceiver;
+	BroadcastReceiver scanReceiver;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -70,8 +72,16 @@ public class AlarmService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		if (wifiManager.isWifiEnabled()) {
-			// Start networks scan.
-			wifiManager.startScan();
+			Bundle extras = intent.getExtras();
+			if (extras == null) { // Service started from AlarmManager - polling.
+				// Start networks scan.
+				wifiManager.startScan();
+			} else { // Service started from BroadcastReceiver - Wi-Fi connected.
+				// Check for rules with connected SSID.
+				String SSID = (String) extras.get("SSID");
+				Log.i("AlarmService", "received SSID " + SSID);
+				checkNetworks(SSID);
+			}
 		} else {
 			// Nothing to do.
 			stopSelf();
@@ -92,45 +102,51 @@ public class AlarmService extends Service {
 				"rules", Context.MODE_PRIVATE);
 		int rulesCount = sharedPreferences.getInt("RulesCount", 0);
 		for (int j = 0; j < wifiList.size(); j++) {
-			for (int k = 1; k <= rulesCount; k++) {
-				boolean currentEnabled = sharedPreferences.getBoolean("Enabled"
-						+ Integer.toString(k), false);
-				if (currentEnabled) {
-					String currentSSID = sharedPreferences.getString("SSID"
-							+ Integer.toString(k), "error");
-					if (currentSSID.equals(wifiList.get(j).SSID)) {
-						String currentTitle = sharedPreferences.getString(
-								"Title" + Integer.toString(k), "error");
-						String currentText = sharedPreferences.getString("Text"
-								+ Integer.toString(k), "error");
-						// Show reminder alert, vibrate and play sound.
-						showReminder(currentTitle + " (" + currentSSID + ")",
-								currentText);
-						// Disable this reminder so that reminders don't pile
-						// up.
-						SharedPreferences.Editor editor = sharedPreferences
-								.edit();
-						editor.putBoolean("Enabled" + Integer.toString(k),
-								false);
-						editor.commit();
-						// Check if there are still enabled reminders.
-						boolean activeExist = false;
-						for (int i = 1; i <= rulesCount; i++) {
-							if (sharedPreferences.getBoolean("Enabled"
-									+ Integer.toString(i), false)) {
-								activeExist = true;
-							}
-						}
-						if (!activeExist) {
-							// Cancel all existing alarms.
-							stopAlarm();
-						}
-					}
-				}
-
+			checkNetworks(wifiList.get(j).SSID);
+		}
+		// Check if there are still enabled reminders.
+		boolean activeExist = false;
+		for (int i = 1; i <= rulesCount; i++) {
+			if (sharedPreferences.getBoolean("Enabled"
+					+ Integer.toString(i), false)) {
+				activeExist = true;
 			}
 		}
+		if (!activeExist) {
+			// Cancel all existing alarms.
+			stopAlarm();
+		}
 		stopSelf();
+	}
+	
+	public void checkNetworks(String SSID) {
+		SharedPreferences sharedPreferences = this.getSharedPreferences(
+				"rules", Context.MODE_PRIVATE);
+		int rulesCount = sharedPreferences.getInt("RulesCount", 0);
+		for (int k = 1; k <= rulesCount; k++) {
+			boolean currentEnabled = sharedPreferences.getBoolean("Enabled"
+					+ Integer.toString(k), false);
+			if (currentEnabled) {
+				String currentSSID = sharedPreferences.getString("SSID"
+						+ Integer.toString(k), "error");
+				if (currentSSID.equals(SSID)) {
+					String currentTitle = sharedPreferences.getString(
+							"Title" + Integer.toString(k), "error");
+					String currentText = sharedPreferences.getString("Text"
+							+ Integer.toString(k), "error");
+					// Show reminder alert, vibrate and play sound.
+					showReminder(currentTitle + " (" + currentSSID + ")",
+							currentText);
+					// Disable this reminder so that reminders don't pile
+					// up.
+					SharedPreferences.Editor editor = sharedPreferences
+							.edit();
+					editor.putBoolean("Enabled" + Integer.toString(k),
+							false);
+					editor.commit();
+				}
+			}
+		}
 	}
 
 	public void stopAlarm() {
