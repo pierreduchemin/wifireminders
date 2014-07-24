@@ -41,6 +41,10 @@ If you like this application and want to see it on Google Play, please [donate](
 
 ## Changelog
 
+1.2.1
+
+ * Added warning if Wi-Fi is off.
+
 1.2.0
 
  * Added zero interval option to notify only on connection (saves battery).
