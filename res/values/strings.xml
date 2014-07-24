@@ -10,6 +10,8 @@
     <string name="action_delete">Delete</string>
     <string name="label_title">Title</string>
     <string name="label_reminder_text">Reminder Text</string>
+    <string name="error_wifi_off_title">No networks found</string>
+    <string name="error_wifi_off_text">Enable Wi-Fi in Settings?</string>
     <string name="label_reminders_list">Reminders List</string>
     <string name="label_ssid_list">SSID List</string>
     <string name="title_activity_settings">Settings</string>

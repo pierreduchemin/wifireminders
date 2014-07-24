@@ -1,16 +1,16 @@
 /*
  * This file is part of Wi-Fi Reminders.
- * 
+ *
  * Wi-Fi Reminders is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Wi-Fi Reminders is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Wi-Fi Reminders.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,6 +24,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -33,6 +34,7 @@ import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -40,7 +42,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 
 public class AddReminderActivity extends Activity {
-	
+
 	private
 		BroadcastReceiver scanReceiver;
 		ArrayAdapter<String> adapter;
@@ -65,7 +67,7 @@ public class AddReminderActivity extends Activity {
 		};
 		registerReceiver(scanReceiver, intentFilter);
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -84,15 +86,33 @@ public class AddReminderActivity extends Activity {
 		// Start scanning for visible networks.
 		if (mainWifi.isWifiEnabled()) {
 			mainWifi.startScan();
+			// Getting list of stored networks.
+			List<WifiConfiguration> wifiList = mainWifi.getConfiguredNetworks();
+			for (WifiConfiguration result : wifiList) {
+				// Removing quotes.
+				adapter.add(result.SSID.toString().replaceAll(
+						"^\"|\"$", ""));
+			}
+			adapter.notifyDataSetChanged();
 		}
-		// Getting list of stored networks.
-		List<WifiConfiguration> wifiList = mainWifi.getConfiguredNetworks();
-		for (WifiConfiguration result : wifiList) {
-			// Removing quotes.
-			adapter.add(result.SSID.toString().replaceAll(
-					"^\"|\"$", ""));
+		else {
+			new AlertDialog.Builder(this)
+		    .setTitle(R.string.error_wifi_off_title)
+		    .setMessage(R.string.error_wifi_off_text)
+		    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) {
+		        	startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
+		        	finish();
+		        }
+		     })
+		    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) {
+		        	finish();
+		        }
+		     })
+		    .setIcon(android.R.drawable.ic_dialog_alert)
+        .show();
 		}
-		adapter.notifyDataSetChanged();
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -144,7 +164,7 @@ public class AddReminderActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	public void scanResultHandler(List<ScanResult> wifiList) {
 		SharedPreferences sharedPrefSettings = PreferenceManager.getDefaultSharedPreferences(this);
 		String intervalString = sharedPrefSettings.getString("prefInterval", "0");
